@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "cors": "^2.8.6",
+    "docx-pdf": "^0.0.1",
+    "express": "^5.2.1",
+    "multer": "^2.2.0",
+    "pdf-parse": "^2.4.5",
+    "pdfkit": "^0.19.1"
+  }
+}

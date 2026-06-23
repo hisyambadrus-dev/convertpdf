@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Converter - Samspace Tools</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tool-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+            <div class="flex items-center space-x-4 font-bold text-xl text-indigo-600 shrink-0">
+                <button id="btnBack" onclick="backToHome()" class="hidden text-sm font-semibold text-slate-500 hover:text-indigo-600 flex items-center gap-1.5 whitespace-nowrap cursor-pointer transition-colors normal-case">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="backToHome()">
+                    <i class="fa-solid fa-file-pdf text-2xl"></i>
+                    <span>FlexiPDF</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 flex-grow justify-end max-w-xl">
+                <div id="searchWrapper" class="relative w-full max-w-xs md:max-w-sm">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="searchInput" onkeyup="searchTools()" placeholder="Cari tools..." class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                </div>
+                <button onclick="toggleLoginModal(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-regular fa-user"></i> Masuk / Daftar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div id="mainCatalog">
+        <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-10">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-extrabold text-slate-900 md:text-4xl mb-3">One Dashboard for All Your Document Needs</h1>
+                <p class="text-slate-500 max-w-xl mx-auto text-sm md:text-base">Konversi file Anda ke dan dari PDF secara instan tanpa ribet.</p>
+            </div>
+
+            <div class="flex justify-center space-x-2 mb-8 border-b border-slate-200 pb-px">
+                <button onclick="filterCategory('all')" id="tab-all" class="tab-btn px-5 py-2.5 font-medium text-sm border-b-2 border-indigo-600 text-indigo-600 transition-all">Semua Tools</button>
+                <button onclick="filterCategory('to-pdf')" id="tab-to-pdf" class="tab-btn px-5 py-2.5 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-all">Convert TO PDF</button>
+                <button onclick="filterCategory('from-pdf')" id="tab-from-pdf" class="tab-btn px-5 py-2.5 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-all">Convert FROM PDF</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                
+                <div class="section-container" data-category="to-pdf">
+                    <h2 class="text-lg font-bold text-slate-700 uppercase tracking-wider mb-5 flex items-center gap-2">
+                        <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-md"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                        Convert To PDF
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('JPG to PDF')">
+                            <div class="w-12 h-12 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-regular fa-image"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">JPG to PDF</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Ubah gambar JPG ke dokumen PDF.</p>
+                            </div>
+                        </div>
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('WORD to PDF')">
+                            <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-regular fa-file-word"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">WORD to PDF</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Ubah file Docx Anda ke PDF.</p>
+                            </div>
+                        </div>
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('POWERPOINT to PDF')">
+                            <div class="w-12 h-12 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-regular fa-file-powerpoint"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">POWERPOINT to PDF</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Ubah presentasi PPT ke PDF.</p>
+                            </div>
+                        </div>
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('EXCEL to PDF')">
+                            <div class="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-regular fa-file-excel"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">EXCEL to PDF</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Ubah spreadsheet Excel ke PDF.</p>
+                            </div>
+                        </div>
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('HTML to PDF')">
+                            <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">HTML to PDF</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Simpan halaman web menjadi PDF.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-container" data-category="from-pdf">
+                    <h2 class="text-lg font-bold text-slate-700 uppercase tracking-wider mb-5 flex items-center gap-2">
+                        <span class="p-1.5 bg-rose-50 text-rose-600 rounded-md"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                        Convert From PDF
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('PDF to JPG')">
+                            <div class="w-12 h-12 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-regular fa-image"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">PDF to JPG</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Ekstrak gambar atau ubah PDF ke JPG.</p>
+                            </div>
+                        </div>
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('PDF to WORD')">
+                            <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-regular fa-file-word"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">PDF to WORD</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Konversi dokumen PDF kembali ke Word.</p>
+                            </div>
+                        </div>
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('PDF to POWERPOINT')">
+                            <div class="w-12 h-12 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-regular fa-file-powerpoint"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">PDF to PPT</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Ubah kembali PDF menjadi presentasi PPT.</p>
+                            </div>
+                        </div>
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('PDF to EXCEL')">
+                            <div class="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold shrink-0">
+                                <i class="fa-regular fa-file-excel"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">PDF to EXCEL</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Ubah tabel PDF ke data spreadsheet.</p>
+                            </div>
+                        </div>
+                        <div class="tool-card bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md flex items-center gap-4 cursor-pointer" onclick="handleToolClick('PDF to PDF/A')">
+                            <div class="w-12 h-12 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center text-sm font-black shrink-0">
+                                /A
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm md:text-base">PDF to PDF/A</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Konversi ke standar arsip jangka panjang.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="noResults" class="hidden text-center py-12 text-slate-400">
+                <i class="fa-regular fa-face-frown text-4xl mb-3"></i>
+                <p>Tools yang kamu cari tidak ditemukan.</p>
+            </div>
+        </main>
+    </div>
+
+    <div id="uploadWorkspace" class="hidden flex-grow flex flex-col items-center justify-center bg-[#f3f4f9] px-4 py-16 transition-all duration-300">
+        <div class="max-w-4xl w-full text-center">
+            <h1 id="dynamicTitle" class="text-4xl md:text-5xl font-bold text-[#33333b] mb-4">Split PDF file</h1>
+            <p id="dynamicDesc" class="text-lg md:text-xl text-[#65656d] max-w-2xl mx-auto mb-10">Separate one page or a whole set for easy conversion into independent PDF files.</p>
+            
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <input type="file" id="workspaceFileInput" class="hidden" onchange="handleFileSelected(event)">
+                <button onclick="document.getElementById('workspaceFileInput').click()" class="bg-[#ef3434] hover:bg-[#d62828] text-white font-bold text-xl md:text-2xl px-12 py-6 rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.99] transition-all cursor-pointer tracking-wide">
+                    Select File
+                </button>
+                <div class="flex flex-col gap-2">
+                    <button class="w-10 h-10 bg-[#ef3434] hover:bg-[#d62828] text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all cursor-pointer text-sm"><i class="fa-brands fa-google-drive"></i></button>
+                    <button class="w-10 h-10 bg-[#ef3434] hover:bg-[#d62828] text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all cursor-pointer text-sm"><i class="fa-brands fa-dropbox"></i></button>
+                </div>
+            </div>
+            <p class="text-sm text-[#707079]">or drop file here</p>
+
+            <div id="exportWrapper" class="hidden mt-12 bg-white rounded-2xl p-6 shadow-md max-w-xl mx-auto text-left border border-slate-200">
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wide mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-file-circle-check text-emerald-500"></i> File Siap Diproses
+                </h3>
+                <table class="w-full text-sm mb-6">
+                    <thead>
+                        <tr class="border-b border-slate-100 text-slate-400">
+                            <th class="pb-2 text-left font-semibold">Nama File</th>
+                            <th class="pb-2 text-right font-semibold">Ukuran</th>
+                            <th class="pb-2 text-center font-semibold">Hapus</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileTableBody"></tbody>
+                </table>
+                <div class="flex justify-end">
+                    <button onclick="processConversion()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2 shadow-md transition-all cursor-pointer text-sm">
+                        Lanjutkan Ekspor <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all duration-300">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-slate-100 relative">
+            
+            <button onclick="toggleLoginModal(false)" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="p-8">
+                <div class="text-center mb-6">
+                    <h2 id="modalTitle" class="text-2xl font-bold text-slate-800">Selamat Datang</h2>
+                    <p id="modalDesc" class="text-sm text-slate-400 mt-1">Silakan masuk ke akun FlexiPDF Anda</p>
+                </div>
+
+                <button onclick="alert('OAuth Google Berhasil')" class="w-full border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium py-2.5 rounded-xl flex items-center justify-center gap-2.5 text-sm transition-all cursor-pointer shadow-xs mb-4">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="#EA4335" d="M12 5.04c1.64 0 3.12.56 4.28 1.67l3.2-3.2C17.52 1.58 14.92 1 12 1 7.35 1 3.4 3.65 1.5 7.5l3.6 2.8C6.01 7.14 8.79 5.04 12 5.04z"/>
+                        <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.46c-.29 1.48-1.14 2.73-2.42 3.58l3.61 2.8c2.11-1.95 3.34-4.82 3.34-8.53z"/>
+                        <path fill="#FBBC05" d="M5.1 14.7c-.24-.72-.38-1.49-.38-2.3s.14-1.58.38-2.3L1.5 7.3C.54 9.22 0 11.35 0 13.6s.54 4.38 1.5 6.3l3.6-2.9z"/>
+                        <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.92l-3.61-2.8c-1.01.68-2.31 1.09-3.92 1.09-3.21 0-5.99-2.1-6.96-5.26l-3.6 2.8C3.4 20.35 7.35 23 12 23z"/>
+                    </svg>
+                    Lanjutkan dengan Google
+                </button>
+
+                <div class="flex items-center my-5 text-xs text-slate-400 uppercase tracking-wider">
+                    <div class="flex-grow border-t border-slate-200"></div>
+                    <span class="px-3">atau gunakan data diri</span>
+                    <div class="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    
+                    <div id="groupName" class="hidden">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Nama Lengkap</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm"><i class="fa-regular fa-id-card"></i></span>
+                            <input type="text" id="inputName" placeholder="Hisyam Badrus" class="w-full pl-9 pr-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Alamat Email</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm"><i class="fa-regular fa-envelope"></i></span>
+                            <input type="email" id="inputEmail" placeholder="nama@email.com" required class="w-full pl-9 pr-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Nomor Handphone</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm"><i class="fa-solid fa-phone-nodes"></i></span>
+                            <input type="tel" id="inputPhone" placeholder="081234567xxx" required class="w-full pl-9 pr-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Kata Sandi</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="inputPassword" placeholder="••••••••" required class="w-full pl-9 pr-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnSubmitModal" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm shadow-md transition-all cursor-pointer mt-2">
+                        Masuk Sekarang
+                    </button>
+                </form>
+
+                <div class="text-center mt-6 text-sm text-slate-500">
+                    <span id="switchText">Belum punya akun?</span>
+                    <button onclick="toggleFormMode()" id="btnSwitchMode" class="text-indigo-600 hover:text-indigo-700 font-semibold ml-1 cursor-pointer outline-none">Daftar di sini</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 mt-12">
+        <p>&copy; 2026 FlexiPDF. Designed for Flexibility.</p>
+    </footer>
+
+    <script>
+        let isSignUpMode = false;
+
+        function toggleLoginModal(show) {
+            const modal = document.getElementById('loginModal');
+            if(show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function toggleFormMode() {
+            isSignUpMode = !isSignUpMode;
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDesc = document.getElementById('modalDesc');
+            const groupName = document.getElementById('groupName');
+            const inputName = document.getElementById('inputName');
+            const btnSubmitModal = document.getElementById('btnSubmitModal');
+            const switchText = document.getElementById('switchText');
+            const btnSwitchMode = document.getElementById('btnSwitchMode');
+
+            if(isSignUpMode) {
+                modalTitle.innerText = "Buat Akun Baru";
+                modalDesc.innerText = "Daftar gratis untuk akses fitur konversi tanpa batas";
+                groupName.classList.remove('hidden');
+                inputName.required = true;
+                btnSubmitModal.innerText = "Daftar Akun";
+                switchText.innerText = "Sudah punya akun?";
+                btnSwitchMode.innerText = "Masuk di sini";
+            } else {
+                modalTitle.innerText = "Selamat Datang";
+                modalDesc.innerText = "Silakan masuk ke akun FlexiPDF Anda";
+                groupName.classList.add('hidden');
+                inputName.required = false;
+                btnSubmitModal.innerText = "Masuk Sekarang";
+                switchText.innerText = "Belum punya akun?";
+                btnSwitchMode.innerText = "Daftar di sini";
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const action = isSignUpMode ? 'Pendaftaran' : 'Autentikasi';
+            alert(`${action} menggunakan Email & No HP berhasil diproses!`);
+            toggleLoginModal(false);
+        }
+
+        function handleToolClick(toolName) {
+            const mainCatalog = document.getElementById('mainCatalog');
+            const uploadWorkspace = document.getElementById('uploadWorkspace');
+            const btnBack = document.getElementById('btnBack');
+            const searchWrapper = document.getElementById('searchWrapper');
+
+            const cards = document.querySelectorAll('.tool-card');
+            let toolDesc = "Proses file konversi secara instan.";
+            cards.forEach(card => {
+                if(card.querySelector('h3').innerText === toolName) {
+                    toolDesc = card.querySelector('p').innerText;
+                }
+            });
+
+            document.getElementById('dynamicTitle').innerText = toolName;
+            document.getElementById('dynamicDesc').innerText = toolDesc;
+
+            mainCatalog.classList.add('hidden');
+            searchWrapper.classList.add('hidden');
+            uploadWorkspace.classList.remove('hidden');
+            btnBack.classList.remove('hidden');
+            
+            document.getElementById('exportWrapper').classList.add('hidden');
+            document.getElementById('workspaceFileInput').value = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToHome() {
+            document.getElementById('uploadWorkspace').classList.add('hidden');
+            document.getElementById('btnBack').classList.add('hidden');
+            document.getElementById('mainCatalog').classList.remove('hidden');
+            document.getElementById('searchWrapper').classList.remove('hidden');
+        }
+
+        function handleFileSelected(event) {
+            const files = event.target.files;
+            if(files.length > 0) {
+                const file = files[0];
+                const size = (file.size / (1024 * 1024)).toFixed(2);
+                const tbody = document.getElementById('fileTableBody');
+                
+                tbody.innerHTML = `
+                    <tr class="text-slate-700">
+                        <td class="py-3 text-left max-w-[240px] truncate">${file.name}</td>
+                        <td class="py-3 text-right text-slate-500">${size} MB</td>
+                        <td class="py-3 text-center">
+                            <button onclick="clearFile()" class="text-red-500 hover:text-red-700 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('exportWrapper').classList.remove('hidden');
+            }
+        }
+
+        function clearFile() {
+            document.getElementById('exportWrapper').classList.add('hidden');
+            document.getElementById('workspaceFileInput').value = '';
+        }
+
+      function processConversion() {
+    // 1. Ambil file dari list drop/select UI kamu (biasanya disimpan di variabel global fileList atau uploadedFiles)
+    // Di sini kita cek elemen baris file yang tampil di layar secara dinamis jika variabel global lu nge-bug
+    let fileUntukDiunggah = null;
+    
+    if (typeof selectedFile !== 'undefined' && selectedFile) {
+        fileUntukDiunggah = selectedFile;
+    } else if (typeof uploadedFiles !== 'undefined' && uploadedFiles && uploadedFiles.length > 0) {
+        fileUntukDiunggah = uploadedFiles[0];
+    } else {
+        // Solusi pamungkas: Ambil langsung dari input file HTML asli jika ada file yang tersangkut di sana
+        const fileInput = document.getElementById('file-upload') || document.querySelector('input[type="file"]');
+        if (fileInput && fileInput.files.length > 0) {
+            fileUntukDiunggah = fileInput.files[0];
+        }
+    }
+
+    // Jika semua pengecekan di atas tetap kosong, pakai fallback baris teks tabel di bawah
+    if (!fileUntukDiunggah) {
+        const fileRow = document.querySelector('[class*="FILE SIAP DIPROSES"] input, td, p');
+        if (!fileRow) {
+            alert('Silakan pilih file terlebih dahulu.');
+            return;
+        }
+    }
+
+    const formData = new FormData();
+    // 'file' disesuaikan dengan upload.single('file') di server.js
+    formData.append('file', fileUntukDiunggah); 
+    
+    // Mengambil tipe alat konversi secara otomatis dari text Header (WORD to PDF / PDF to JPG)
+    const headerText = document.querySelector('h1')?.innerText || 'WORD';
+    formData.append('toolName', headerText); 
+
+    const exportBtn = document.getElementById('export-btn') || document.querySelector('button[class*="Lanjutkan Ekspor"]');
+    let originalText = 'Lanjutkan Ekspor';
+    if (exportBtn) {
+        originalText = exportBtn.innerHTML;
+        exportBtn.innerHTML = 'Memproses...';
+        exportBtn.disabled = true;
+    }
+
+    // Tembak langsung ke API server.js baru kamu
+    fetch('/api/convert', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Gagal merespon ke server');
+        return response.json();
+    })
+    .then(data => {
+        if (exportBtn) {
+            exportBtn.innerHTML = originalText;
+            exportBtn.disabled = false;
+        }
+
+        if (data.success) {
+            alert('File berhasil dikonversi!');
+            const downloadLink = document.createElement('a');
+            downloadLink.href = data.downloadUrl;
+            downloadLink.download = '';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        } else {
+            alert('Gagal memproses file: ' + data.message);
+        }
+    })
+    .catch(error => {
+        if (exportBtn) {
+            exportBtn.innerHTML = originalText;
+            exportBtn.disabled = false;
+        }
+        console.error('Error:', error);
+        alert('Terjadi kesalahan sambungan jaringan atau server mati.');
+    });
+}
+        window.addEventListener('dragover', e => e.preventDefault());
+        window.addEventListener('drop', e => {
+            e.preventDefault();
+            const ws = document.getElementById('uploadWorkspace');
+            if(!ws.classList.contains('hidden')) {
+                const files = e.dataTransfer.files;
+                if(files.length > 0) {
+                    document.getElementById('workspaceFileInput').files = files;
+                    handleFileSelected({ target: { files: files } });
+                }
+            }
+        });
+
+        function filterCategory(category) {
+            const sections = document.querySelectorAll('.section-container');
+            const tabs = document.querySelectorAll('.tab-btn');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('border-indigo-600', 'text-indigo-600');
+                tab.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(`tab-${category}`).classList.add('border-indigo-600', 'text-indigo-600');
+            document.getElementById(`tab-${category}`).classList.remove('border-transparent', 'text-slate-500');
+
+            sections.forEach(section => {
+                if (category === 'all' || section.getAttribute('data-category') === category) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+        }
+
+        function searchTools() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.tool-card');
+            const sections = document.querySelectorAll('.section-container');
+            let hasResults = false;
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                const desc = card.querySelector('p').innerText.toLowerCase();
+                
+                if (title.includes(input) || desc.includes(input)) {
+                    card.classList.remove('hidden');
+                    hasResults = true;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            sections.forEach(section => {
+                const visibleCards = section.querySelectorAll('.tool-card:not(.hidden)');
+                if (visibleCards.length === 0 && input !== "") {
+                    section.classList.add('hidden');
+                } else {
+                    section.classList.remove('hidden');
+                }
+            });
+
+            const noResults = document.getElementById('noResults');
+            if (!hasResults && input !== "") {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
